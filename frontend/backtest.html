@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarvaX Backtest</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .stat-positive {
+            color: var(--accent-green);
+        }
+
+        .stat-negative {
+            color: var(--accent-red);
+        }
+
+        .stat-neutral {
+            color: var(--accent-gold);
+        }
+
+        .trade-win {
+            background: rgba(0, 208, 132, 0.1);
+        }
+
+        .trade-loss {
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        .trade-carry {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-row input {
+            flex: 1;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .input-row input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .input-row select {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            min-width: 120px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-link">← Back to Scanner</a>
+
+        <header>
+            <h1>DarvaX Backtest</h1>
+            <p class="subtitle">The Time Machine</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <div class="input-row">
+                    <input type="text" id="ticker" placeholder="Enter ticker (e.g., ADANIPOWER)">
+                    <select id="years">
+                        <option value="3">3 Years</option>
+                        <option value="5" selected>5 Years</option>
+                    </select>
+                </div>
+                <button id="backtest-btn">🔬 Run Backtest</button>
+            </section>
+
+            <section class="results-section" id="results-section" style="display: none;">
+                <div id="loading" class="loading" style="display: none;">
+                    Running backtest... ⏳
+                </div>
+
+                <div id="stats-section" style="display: none;">
+                    <h2>Performance Summary</h2>
+                    <div class="stats-grid" id="stats-grid"></div>
+                </div>
+
+                <div id="trades-section" style="display: none;">
+                    <h2>Trade History</h2>
+                    <table id="trades-table">
+                        <thead>
+                            <tr>
+                                <th>Setup Date</th>
+                                <th>Trigger</th>
+                                <th>Stop</th>
+                                <th>Target</th>
+                                <th>Status</th>
+                                <th>P&L %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trades-body"></tbody>
+                    </table>
+                </div>
+
+                <p id="no-results" class="no-results" style="display: none;"></p>
+            </section>
+        </main>
+
+        <footer>
+            <p>Corrected Backtest Engine • ATH Bias Fixed • Volume Logic Fixed</p>
+        </footer>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+
+        const tickerInput = document.getElementById('ticker');
+        const yearsSelect = document.getElementById('years');
+        const backtestBtn = document.getElementById('backtest-btn');
+        const resultsSection = document.getElementById('results-section');
+        const loadingEl = document.getElementById('loading');
+        const statsSection = document.getElementById('stats-section');
+        const statsGrid = document.getElementById('stats-grid');
+        const tradesSection = document.getElementById('trades-section');
+        const tradesBody = document.getElementById('trades-body');
+        const noResultsEl = document.getElementById('no-results');
+
+        backtestBtn.addEventListener('click', async () => {
+            const ticker = tickerInput.value.trim().toUpperCase();
+            if (!ticker) {
+                alert('Please enter a ticker');
+                return;
+            }
+
+            const years = parseInt(yearsSelect.value);
+
+            // Show loading
+            resultsSection.style.display = 'block';
+            loadingEl.style.display = 'block';
+            statsSection.style.display = 'none';
+            tradesSection.style.display = 'none';
+            noResultsEl.style.display = 'none';
+            backtestBtn.disabled = true;
+            backtestBtn.textContent = 'Running...';
+
+            try {
+                const response = await fetch(`${API_URL}/api/backtest`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ticker, years }),
+                });
+
+                if (!response.ok) throw new Error('Backtest failed');
+
+                const result = await response.json();
+                displayResults(result);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to run backtest. Make sure the backend is running.');
+            } finally {
+                loadingEl.style.display = 'none';
+                backtestBtn.disabled = false;
+                backtestBtn.textContent = '🔬 Run Backtest';
+            }
+        });
+
+        function displayResults(result) {
+            if (result.error) {
+                noResultsEl.textContent = result.error;
+                noResultsEl.style.display = 'block';
+                return;
+            }
+
+            if (!result.trades || result.trades.length === 0) {
+                noResultsEl.textContent = 'No DarvaX setups found in this period.';
+                noResultsEl.style.display = 'block';
+                return;
+            }
+
+            // Display Stats
+            const stats = result.stats;
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${stats.total_trades}</div>
+                    <div class="stat-label">Total Trades</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value stat-positive">${stats.wins}</div>
+                    <div class="stat-label">Wins</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value stat-negative">${stats.losses}</div>
+                    <div class="stat-label">Losses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value stat-neutral">${stats.carries}</div>
+                    <div class="stat-label">Carries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value ${stats.win_rate >= 50 ? 'stat-positive' : 'stat-neutral'}">${stats.win_rate}%</div>
+                    <div class="stat-label">Win Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value ${stats.total_return >= 0 ? 'stat-positive' : 'stat-negative'}">${stats.total_return > 0 ? '+' : ''}${stats.total_return}%</div>
+                    <div class="stat-label">Total Return</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value ${stats.expected_value >= 0 ? 'stat-positive' : 'stat-negative'}">${stats.expected_value > 0 ? '+' : ''}${stats.expected_value}%</div>
+                    <div class="stat-label">Expected Value</div>
+                </div>
+            `;
+            statsSection.style.display = 'block';
+
+            // Display Trades
+            tradesBody.innerHTML = '';
+            result.trades.forEach(trade => {
+                const row = document.createElement('tr');
+                let rowClass = '';
+                if (trade.status === 'WIN') rowClass = 'trade-win';
+                else if (trade.status.includes('LOSS')) rowClass = 'trade-loss';
+                else if (trade.status === 'CARRY') rowClass = 'trade-carry';
+
+                row.className = rowClass;
+                row.innerHTML = `
+                    <td>${trade.setup_date}</td>
+                    <td>₹${trade.trigger}</td>
+                    <td>₹${trade.stop_loss}</td>
+                    <td>₹${trade.target}</td>
+                    <td>${trade.status}</td>
+                    <td class="${trade.pnl_pct >= 0 ? 'stat-positive' : 'stat-negative'}">${trade.pnl_pct > 0 ? '+' : ''}${trade.pnl_pct}%</td>
+                `;
+                tradesBody.appendChild(row);
+            });
+            tradesSection.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,352 @@
+:root {
+    --bg-dark: #0a0a0f;
+    --bg-card: #13131a;
+    --border: #2a2a3a;
+    --text-primary: #f0f0f5;
+    --text-secondary: #8888aa;
+    --accent-gold: #ffd700;
+    --accent-green: #00d084;
+    --accent-red: #ff4757;
+    --accent-blue: #4a9eff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.input-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    color: var(--text-primary);
+    font-family: 'Monaco', monospace;
+    font-size: 0.95rem;
+    resize: vertical;
+    margin-bottom: 1rem;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--accent-gold), #ff9500);
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.results-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.results-section h2 {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: var(--accent-green);
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+td {
+    font-size: 0.95rem;
+}
+
+.ticker-link {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.ticker-link:hover {
+    text-decoration: underline;
+}
+
+.trigger {
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+.stop {
+    color: var(--accent-red);
+}
+
+.volume-contraction {
+    color: var(--accent-gold);
+}
+
+.volume-expansion {
+    color: var(--accent-green);
+}
+
+.volume-neutral {
+    color: var(--text-secondary);
+}
+
+.priority-sniper {
+    color: #ff3366;
+    font-weight: 700;
+    background: rgba(255, 51, 102, 0.15);
+}
+
+.priority-tight {
+    color: var(--accent-gold);
+    font-weight: 600;
+}
+
+.priority-standard {
+    color: var(--accent-green);
+}
+
+.priority-wide {
+    color: var(--text-secondary);
+}
+
+.distance {
+    color: var(--accent-blue);
+    font-weight: 500;
+}
+
+.ath-bluesky {
+    color: #00ff88;
+    font-weight: 700;
+    background: rgba(0, 255, 136, 0.15);
+}
+
+.ath-near {
+    color: var(--accent-gold);
+}
+
+.ath-resist {
+    color: var(--text-secondary);
+}
+
+.no-results {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    table {
+        font-size: 0.85rem;
+    }
+
+    th,
+    td {
+        padding: 0.5rem;
+    }
+}
+
+/* Analyze Button */
+.analyze-chart-btn {
+    background: linear-gradient(135deg, var(--accent-blue), #6a5acd);
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.analyze-chart-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-content h2 {
+    margin-bottom: 1.5rem;
+    color: var(--accent-gold);
+}
+
+#chart-upload {
+    display: block;
+    margin: 1rem 0;
+}
+
+#analyze-btn {
+    width: auto;
+    padding: 0.75rem 1.5rem;
+}
+
+.analysis-result {
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    line-height: 1.8;
+}
+
+.analysis-result h2 {
+    color: var(--accent-green);
+    margin-bottom: 1rem;
+}
+
+.analysis-result h3 {
+    color: var(--accent-gold);
+    margin-top: 1rem;
+}
+
+.analysis-result hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1rem 0;
+}
+
+.error {
+    color: var(--accent-red);
+}

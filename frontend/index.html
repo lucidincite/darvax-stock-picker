@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarvaX Scanner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>DarvaX Scanner</h1>
+            <p class="subtitle">The Non-Negotiable Trinity</p>
+            <nav style="margin-top: 1rem;">
+                <a href="backtest.html" style="color: #4a9eff; text-decoration: none;">🔬 Backtest Tool →</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <label for="tickers">Paste Tickers (one per line):</label>
+                <textarea id="tickers" placeholder="ADANIPOWER
+GNFC
+IRFC
+TATAPOWER"></textarea>
+                <button id="scan-btn">🎯 Scan for Signals</button>
+            </section>
+
+            <section class="results-section" id="results-section" style="display: none;">
+                <h2>Verified Signals</h2>
+                <div id="loading" class="loading" style="display: none;">
+                    Scanning... ⏳
+                </div>
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>ATH</th>
+                            <th>Ticker</th>
+                            <th>Close</th>
+                            <th>Trigger</th>
+                            <th>Distance</th>
+                            <th>Stop Loss</th>
+                            <th>Volume</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-body">
+                    </tbody>
+                </table>
+                <p id="no-results" class="no-results" style="display: none;">
+                    No stocks passed all filters. Try different tickers.
+                </p>
+            </section>
+        </main>
+
+        <footer>
+            <p>Built on the DarvaX Methodology • Scan on Weekends • Execute on Mondays</p>
+        </footer>
+    </div>
+
+    <!-- Chart Analysis Modal -->
+    <div id="analysis-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="modal-close">&times;</span>
+            <h2>📊 Chart Analysis: <span id="modal-ticker"></span></h2>
+
+            <div id="upload-section">
+                <p>Upload a Weekly/Monthly chart screenshot for forensic analysis:</p>
+                <input type="file" id="chart-upload" accept="image/*">
+                <button id="analyze-btn" disabled>🔬 Analyze Chart</button>
+            </div>
+
+            <div id="analysis-loading" style="display: none;" class="loading">
+                Analyzing chart with Gemini Vision... 🧠
+            </div>
+
+            <div id="analysis-result" class="analysis-result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
