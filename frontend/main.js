@@ -1,4 +1,7 @@
-const API_URL = 'http://localhost:8000';
+// Auto-detect environment: localhost for dev, Railway URL for production
+const API_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://darvax-stock-picker-production.up.railway.app';  // Update after Railway deployment
 
 const tickersInput = document.getElementById('tickers');
 const scanBtn = document.getElementById('scan-btn');

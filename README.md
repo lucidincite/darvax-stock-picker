@@ -15,7 +15,7 @@ A web application implementing the DarvaX trading methodology for identifying hi
 
 - **Chart Analysis**: Gemini Vision AI for forensic chart audits
 
-## Setup
+## Local Development
 
 ### Backend
 ```bash
@@ -24,8 +24,8 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# Set your Gemini API key
-export GEMINI_API_KEY="your-api-key"
+# Create .env file
+echo "GEMINI_API_KEY=your-api-key" > .env
 
 # Run server
 uvicorn main:app --reload --port 8000
@@ -36,15 +36,23 @@ uvicorn main:app --reload --port 8000
 open frontend/index.html
 ```
 
-## Usage
+## Deployment
 
-1. Paste ticker symbols (one per line)
-2. Click "Scan for Signals"
-3. Results sorted by distance (tightest first)
-4. Click 📊 to analyze charts with AI
+### Frontend → Vercel
+1. Connect your GitHub repo to Vercel
+2. Deploy (auto-detects vercel.json config)
+
+### Backend → Railway
+1. Create new project on [Railway](https://railway.app)
+2. Connect your GitHub repo
+3. Add environment variable: `GEMINI_API_KEY`
+4. Railway auto-detects Procfile and deploys
+5. Copy your Railway URL (e.g., `https://your-app.up.railway.app`)
+6. Update `frontend/main.js` with your Railway URL
 
 ## Tech Stack
 
 - **Backend**: FastAPI, yfinance, pandas
 - **Frontend**: Vanilla HTML/CSS/JS
 - **AI**: Google Gemini Vision API
+
